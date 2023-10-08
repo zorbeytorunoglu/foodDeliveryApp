@@ -6,12 +6,15 @@ import com.zorbeytorunoglu.fooddeliveryapp.data.remote.dto.GetFoodsInCartRespons
 import com.zorbeytorunoglu.fooddeliveryapp.data.remote.dto.GetFoodsResponse
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.Food
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.FoodInCart
+import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.model.FoodListState
 import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.model.GeneralState
 import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.model.State
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 interface FoodRepository {
+
+    val foodListState: StateFlow<FoodListState>
 
     val cartLiveData: LiveData<List<FoodInCart>>
 
@@ -20,6 +23,8 @@ interface FoodRepository {
     val removeFoodFromCartState: StateFlow<GeneralState>
 
     val getFoodsInCartState: StateFlow<State<List<FoodInCart>>>
+
+    fun updateFoodListState(foodListState: FoodListState)
 
     fun updateCartLiveData(foodInCartList: List<FoodInCart>)
 

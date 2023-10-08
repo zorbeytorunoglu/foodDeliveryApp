@@ -4,6 +4,7 @@ import com.zorbeytorunoglu.fooddeliveryapp.common.Result
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.Food
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.FoodInCart
 import com.zorbeytorunoglu.fooddeliveryapp.domain.repository.FoodRepository
+import com.zorbeytorunoglu.fooddeliveryapp.domain.use_case.get_user.GetUserUseCase
 import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.model.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flow
@@ -14,16 +15,21 @@ import java.io.IOException
 import javax.inject.Inject
 
 class GetFoodsInCartUseCase @Inject constructor(
-    private val repository: FoodRepository
+    private val repository: FoodRepository,
+    private val getUserUseCase: GetUserUseCase
 ) {
 
-    fun getFoodsInCart(foods: List<Food>, userUuid: String, scope: CoroutineScope) {
+    operator fun invoke(scope: CoroutineScope) {
+
+        if (repository.foodListState.value.categories.isEmpty()) return
+
+        val foods = repository.foodListState.value.categories.flatMap { it.foodList }
 
         flow<Result<List<FoodInCart>>> {
 
             try {
                 emit(Result.Loading<List<FoodInCart>>())
-                val response = repository.getFoodsInCart(userUuid)
+                val response = repository.getFoodsInCart(getUserUseCase().uid)
                 if (response.success == 0) {
                     emit(Result.Error<List<FoodInCart>>("An error occurred on loading the foods in cart."))
                 } else {

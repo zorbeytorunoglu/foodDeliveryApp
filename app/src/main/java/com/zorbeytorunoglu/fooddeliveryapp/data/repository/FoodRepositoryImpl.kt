@@ -9,6 +9,7 @@ import com.zorbeytorunoglu.fooddeliveryapp.data.remote.dto.GetFoodsResponse
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.Food
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.FoodInCart
 import com.zorbeytorunoglu.fooddeliveryapp.domain.repository.FoodRepository
+import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.model.FoodListState
 import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.model.GeneralState
 import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.model.State
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,12 @@ class FoodRepositoryImpl @Inject constructor(
     private val api: FoodApi
 ): FoodRepository {
 
+    private val _foodListState = MutableStateFlow(FoodListState())
+    override val foodListState: StateFlow<FoodListState>
+        get() = _foodListState
+
     private val _cartLiveData = MutableLiveData<List<FoodInCart>>()
+
     override val cartLiveData: LiveData<List<FoodInCart>>
         get() = _cartLiveData
 
@@ -34,6 +40,10 @@ class FoodRepositoryImpl @Inject constructor(
     private val _getFoodsInCartState = MutableStateFlow(State<List<FoodInCart>>())
     override val getFoodsInCartState: StateFlow<State<List<FoodInCart>>>
         get() = _getFoodsInCartState
+
+    override fun updateFoodListState(foodListState: FoodListState) {
+        _foodListState.value = foodListState
+    }
 
     override fun updateCartLiveData(foodInCartList: List<FoodInCart>) {
         _cartLiveData.value = foodInCartList
