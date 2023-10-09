@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="2dp"
                         android:fontFamily="@font/pacifico"
-                        android:text="GoFood"
+                        android:text="@string/gofood"
                         android:textColor="@color/mainTextColor"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -100,7 +100,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginEnd="8dp"
-                                android:text="1"
+                                android:text="@string/_1"
                                 android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -152,7 +152,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:queryBackground="@null"
-                                app:queryHint="Search for food"
+                                app:queryHint="@string/search_for_food"
                                 app:searchIcon="@drawable/baseline_search_24" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 

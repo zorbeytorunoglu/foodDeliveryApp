@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.zorbeytorunoglu.fooddeliveryapp.common.Constants
 import com.zorbeytorunoglu.fooddeliveryapp.databinding.MainFragmentFoodCardDesignBinding
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.Food
+import com.zorbeytorunoglu.fooddeliveryapp.ui.fragment.MainFragmentDirections
 import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.MainFragmentViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -70,6 +72,12 @@ class FoodAdapter(
         binding.removeImageView.setOnClickListener {
             viewModel.removeFoodFromCart(food)
             delayClickable(binding.removeImageView, 1000)
+        }
+
+        binding.foodImage.setOnClickListener {
+            Navigation.findNavController(it).navigate(
+                MainFragmentDirections.actionMainFragmentToFoodDetailFragment(food)
+            )
         }
 
     }

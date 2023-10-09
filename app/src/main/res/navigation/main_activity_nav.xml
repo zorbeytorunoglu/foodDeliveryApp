@@ -55,6 +55,9 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/cartFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mainFragment_to_foodDetailFragment"
+            app:destination="@id/foodDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
@@ -63,6 +66,21 @@
         tools:layout="@layout/fragment_cart" >
         <action
             android:id="@+id/action_cartFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/foodDetailFragment"
+        android:name="com.zorbeytorunoglu.fooddeliveryapp.ui.fragment.FoodDetailFragment"
+        android:label="fragment_food_detail"
+        tools:layout="@layout/fragment_food_detail" >
+        <argument
+            android:name="food"
+            app:argType="com.zorbeytorunoglu.fooddeliveryapp.domain.model.Food" />
+        <action
+            android:id="@+id/action_foodDetailFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/mainFragment"

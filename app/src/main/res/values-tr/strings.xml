@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">foodDeliveryApp</string>
+    <string name="search_for_food">Yemek ara</string>
+    <string name="check_out">Sepet</string>
+    <string name="delivery_location">Teslimat Konumu</string>
+    <string name="place_the_order">Sipariş ver</string>
+    <string name="it_s_so_cold_and_lonely_here">Burası çok soğuk ve yalnız...</string>
+    <string name="sign_in">Giriş</string>
+    <string name="email">Email</string>
+    <string name="password">Şifre</string>
+    <string name="forgot_your_password">Şifreni mi unuttun?</string>
+    <string name="or_signup_with">ya da bununla kayıt ol</string>
+    <string name="sign_up">Kayıt Ol</string>
+    <string name="username">Kullanıcı adı</string>
+    <string name="already_have_an_account">Zaten hesabın mı var?</string>
+    <string name="order_received">Sipariş alındı!</string>
+    <string name="it_will_arrive_at_your_delivery_location_in_20_30_min">Teslimat konumuna 20-30 dakika içerisinde ulaşacak!</string>
+</resources>

@@ -14,7 +14,7 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="100dp"
-        android:text="Sign In"
+        android:text="@string/sign_in"
         android:textColor="@color/white"
         app:backgroundTint="@color/mainColor"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:text="Sign In"
+        android:text="@string/sign_in"
         android:textColor="@color/mainTextColor"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -52,7 +52,7 @@
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email" />
+            android:hint="@string/email" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -74,7 +74,7 @@
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Forgot your password?"
+        android:text="@string/forgot_your_password"
         android:textColor="@color/mainTextColor"
         app:layout_constraintEnd_toEndOf="@+id/button"
         app:layout_constraintStart_toStartOf="@+id/button"
@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="or signup with"
+        android:text="@string/or_signup_with"
         android:textColor="@color/mainTextColor"
         app:layout_constraintBottom_toTopOf="@+id/signupFacebookıcon"
         app:layout_constraintEnd_toEndOf="parent"
