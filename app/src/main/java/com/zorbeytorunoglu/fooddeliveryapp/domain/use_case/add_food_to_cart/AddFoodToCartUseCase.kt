@@ -19,8 +19,7 @@ class AddFoodToCartUseCase @Inject constructor(
     private val getFoodsInCartUseCase: GetFoodsInCartUseCase
 ) {
 
-    fun addFoodToCart(food: Food, amount: Int, userUuid: String, scope: CoroutineScope) {
-
+    operator fun invoke(food: Food, amount: Int, userUuid: String, updateCart: Boolean, scope: CoroutineScope) {
         flow<Result<CRUDResponse>> {
 
             try {
@@ -42,7 +41,8 @@ class AddFoodToCartUseCase @Inject constructor(
             when (result) {
                 is Result.Success -> {
                     repository.updateAddFoodToCartState(GeneralState(false, ""))
-                    //getFoodsInCart()
+                    if (updateCart)
+                        getFoodsInCartUseCase(scope)
                 }
                 is Result.Error -> {
                     repository.updateAddFoodToCartState(GeneralState(error = result.message ?: "An unexpected error occurred."))
@@ -53,27 +53,6 @@ class AddFoodToCartUseCase @Inject constructor(
             }
 
         }.launchIn(scope)
-
     }
-
-//    fun addFoodToCart(food: Food, amount: Int, userUuid: String): Flow<Result<CRUDResponse>> = flow {
-//
-//        try {
-//            emit(Result.Loading<CRUDResponse>())
-//            val result = repository.addFoodToCart(food,amount, userUuid)
-//
-//            if (result.success == 0) {
-//                emit(Result.Error<CRUDResponse>("Web service usage error occurred."))
-//            } else {
-//                emit(Result.Success<CRUDResponse>(result))
-//            }
-//
-//        } catch (e: HttpException) {
-//            emit(Result.Error<CRUDResponse>(e.localizedMessage ?: "An unexpected error occurred."))
-//        } catch (e: IOException) {
-//            emit(Result.Error<CRUDResponse>(e.localizedMessage ?: "Couldn't reach web service. Check your internet connection."))
-//        }
-//
-//    }
 
 }

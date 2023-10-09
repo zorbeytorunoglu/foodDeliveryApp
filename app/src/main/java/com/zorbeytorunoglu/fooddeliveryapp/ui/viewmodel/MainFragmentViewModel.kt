@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.RequestManager
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.Category
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.Food
+import com.zorbeytorunoglu.fooddeliveryapp.domain.repository.FoodRepository
 import com.zorbeytorunoglu.fooddeliveryapp.domain.use_case.add_food_to_cart.AddFoodToCartUseCase
 import com.zorbeytorunoglu.fooddeliveryapp.domain.use_case.get_foods.GetFoodsUseCase
 import com.zorbeytorunoglu.fooddeliveryapp.domain.use_case.get_foods_in_cart.GetFoodsInCartUseCase
@@ -23,19 +24,24 @@ class MainFragmentViewModel @Inject constructor(
     private val removeFoodFromCartUseCase: RemoveFoodFromCartUseCase,
     private val getFoodsInCartUseCase: GetFoodsInCartUseCase,
     private val searchCategoriesUseCase: SearchCategoriesUseCase,
-    private val imagePreloadUseCase: ImagePreloadUseCase
+    private val imagePreloadUseCase: ImagePreloadUseCase,
+    private val repository: FoodRepository
 ): ViewModel() {
+
+    val foodListState = repository.foodListState
+    val addFoodToCartState = repository.addFoodToCartState
+    val cartLiveData = repository.cartLiveData
 
     init {
         getFoods()
     }
 
     fun removeFoodFromCart(food: Food) {
-        removeFoodFromCartUseCase(food,getUserUseCase().uid,viewModelScope)
+        removeFoodFromCartUseCase(food,getUserUseCase().uid,true, viewModelScope)
     }
 
     fun addFoodToCart(food: Food, amount: Int) {
-        addFoodToCartUseCase.addFoodToCart(food,amount,getUserUseCase().uid,viewModelScope)
+        addFoodToCartUseCase(food,amount,getUserUseCase().uid,true,viewModelScope)
     }
 
     fun getFoodsInCart() {

@@ -19,7 +19,7 @@ class RemoveFoodFromCartUseCase @Inject constructor(
     private val repository: FoodRepository
 ) {
 
-    operator fun invoke(food: Food, userUuid: String, scope: CoroutineScope) {
+    operator fun invoke(food: Food, userUuid: String, updateCart: Boolean, scope: CoroutineScope) {
 
         if (repository.cartLiveData.value == null) return
         if (repository.cartLiveData.value!!.isEmpty()) return
@@ -54,7 +54,8 @@ class RemoveFoodFromCartUseCase @Inject constructor(
                 }
                 is Result.Success -> {
                     repository.updateRemoveFoodFromCartState(GeneralState(false, ""))
-                    getFoodsInCartUseCase(scope)
+                    if (updateCart)
+                        getFoodsInCartUseCase(scope)
                 }
             }
 

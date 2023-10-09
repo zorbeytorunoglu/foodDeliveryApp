@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -17,13 +19,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.zorbeytorunoglu.fooddeliveryapp.R
 import com.zorbeytorunoglu.fooddeliveryapp.databinding.FragmentCartBinding
+import com.zorbeytorunoglu.fooddeliveryapp.domain.model.GroupedCartFood
 import com.zorbeytorunoglu.fooddeliveryapp.ui.adapter.CartAdapter
+import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.CartFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CartFragment : Fragment() {
+class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
 
     private lateinit var binding: FragmentCartBinding
+    private val viewModel: CartFragmentViewModel by viewModels<CartFragmentViewModel>()
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mapFragment: SupportMapFragment
 
@@ -36,17 +42,59 @@ class CartFragment : Fragment() {
 
         binding.mapLoadingAnimation.visibility = View.VISIBLE
 
+        binding.cartRecyclerView.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+
+        val gList = viewModel.groupAndCalculateTotal(viewModel.cartLiveData.value)
+
+        if (gList.isEmpty()) {
+            binding.sadImageView.visibility = View.VISIBLE
+            binding.sadTextView.visibility = View.VISIBLE
+        } else {
+            binding.sadImageView.visibility = View.GONE
+            binding.sadTextView.visibility = View.GONE
+        }
+
+        binding.cartTotalPrice.text = "₺${gList.sumOf { g -> g.totalPrice }}"
+
+        val adapter = CartAdapter(requireContext(), gList.toMutableList(), viewModel, viewLifecycleOwner)
+
+        adapter.setListener(this)
+
+        binding.cartRecyclerView.adapter = adapter
+
+        binding.backImageView.setOnClickListener {
+            Navigation.findNavController(it).navigate(
+                CartFragmentDirections.actionCartFragmentToMainFragment()
+            )
+        }
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
 
         loadMapWithPermission(savedInstanceState).launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
-        binding.cartRecyclerView.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-
-        binding.cartRecyclerView.adapter = CartAdapter(requireContext())
-
         return binding.root
+    }
+
+    override fun onCartEmpty() {
+        binding.sadImageView.visibility = View.VISIBLE
+        binding.sadTextView.visibility = View.VISIBLE
+        binding.cartTotalPrice.text = "₺0"
+        binding.cartRecyclerView.adapter = CartAdapter(requireContext(), emptyList<GroupedCartFood>().toMutableList(),viewModel,viewLifecycleOwner)
+    }
+
+    override fun onFoodAdd(price: Double) {
+        val newTotal = binding.cartTotalPrice.text.toString().substring(1).toDouble() + price
+        binding.cartTotalPrice.text = "₺$newTotal"
+    }
+
+    override fun onFoodRemove(price: Double) {
+        val newTotal = binding.cartTotalPrice.text.toString().substring(1).toDouble() - price
+
+        if (newTotal == 0.0) return
+
+        binding.cartTotalPrice.text = "₺$newTotal"
     }
 
     @SuppressLint("MissingPermission")

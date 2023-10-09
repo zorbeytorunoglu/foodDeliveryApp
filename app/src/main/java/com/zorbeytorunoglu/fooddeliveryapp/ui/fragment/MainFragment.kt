@@ -1,14 +1,10 @@
 package com.zorbeytorunoglu.fooddeliveryapp.ui.fragment
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
@@ -20,7 +16,6 @@ import com.zorbeytorunoglu.fooddeliveryapp.databinding.FragmentMainBinding
 import com.zorbeytorunoglu.fooddeliveryapp.ui.adapter.CategoryAdapter
 import com.zorbeytorunoglu.fooddeliveryapp.ui.dialog.LoadingDialog
 import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.MainFragmentViewModel
-import com.zorbeytorunoglu.fooddeliveryapp.utils.requestPermission2
 import com.zorbeytorunoglu.fooddeliveryapp.utils.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -41,7 +36,6 @@ class MainFragment : Fragment() {
 
         val loadingDialog = LoadingDialog(requireContext(), layoutInflater)
 
-
         ViewCompat.setNestedScrollingEnabled(binding.categoryRecyclerView, false)
         binding.cartSizeCardView.visibility = View.GONE
 
@@ -49,7 +43,7 @@ class MainFragment : Fragment() {
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
 
         lifecycleScope.launch {
-            viewModel.state.collectLatest {
+            viewModel.foodListState.collectLatest {
 
                 loadingDialog.show()
 
@@ -60,6 +54,7 @@ class MainFragment : Fragment() {
                 if (!it.isLoading) {
                     val glide = Glide.with(this@MainFragment)
                     viewModel.waitForImagePreloadingCompletion(it.categories, glide)
+
                     binding.categoryRecyclerView.adapter =
                         CategoryAdapter(requireContext(), it.categories, glide, viewModel, viewLifecycleOwner)
                     loadingDialog.dismiss()

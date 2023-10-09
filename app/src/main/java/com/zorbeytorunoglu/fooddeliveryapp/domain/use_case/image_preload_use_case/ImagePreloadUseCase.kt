@@ -51,8 +51,7 @@ class ImagePreloadUseCase @Inject constructor() {
                                 deferred.complete(Unit)
                                 return true
                             }
-                        })
-                        .preload()
+                        }).preload()
                 }
 
                 deferredPreloads.add(deferred)
