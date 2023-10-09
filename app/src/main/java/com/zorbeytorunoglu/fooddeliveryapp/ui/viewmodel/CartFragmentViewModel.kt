@@ -10,6 +10,8 @@ import com.zorbeytorunoglu.fooddeliveryapp.domain.use_case.get_foods_in_cart.Get
 import com.zorbeytorunoglu.fooddeliveryapp.domain.use_case.get_user.GetUserUseCase
 import com.zorbeytorunoglu.fooddeliveryapp.domain.use_case.remove_food_from_cart.RemoveFoodFromCartUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -62,5 +64,22 @@ class CartFragmentViewModel @Inject constructor(
 
         return groupedFoodMap.values.toList()
     }
+
+    fun clearCart() {
+        viewModelScope.launch {
+            val cartValue = cartLiveData.value
+
+            if (cartValue.isNullOrEmpty()) return@launch
+
+            val deferredList = cartValue.map { food ->
+                viewModelScope.async {
+                    removeFoodFromCart(food, updateCart = false)
+                }
+            }
+
+            deferredList.awaitAll()
+        }
+    }
+
 
 }

@@ -17,10 +17,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import com.zorbeytorunoglu.fooddeliveryapp.R
 import com.zorbeytorunoglu.fooddeliveryapp.databinding.FragmentCartBinding
 import com.zorbeytorunoglu.fooddeliveryapp.domain.model.GroupedCartFood
 import com.zorbeytorunoglu.fooddeliveryapp.ui.adapter.CartAdapter
+import com.zorbeytorunoglu.fooddeliveryapp.ui.dialog.OrderCompleteDialog
 import com.zorbeytorunoglu.fooddeliveryapp.ui.viewmodel.CartFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,6 +70,15 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
             )
         }
 
+        binding.checkoutButton.setOnClickListener {
+            if (viewModel.cartLiveData.value.isNullOrEmpty()) {
+                Snackbar.make(it, "You have nothing in your cart.", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            } else {
+                onPlaceOrder()
+            }
+        }
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
@@ -82,6 +93,14 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
         binding.sadTextView.visibility = View.VISIBLE
         binding.cartTotalPrice.text = "₺0"
         binding.cartRecyclerView.adapter = CartAdapter(requireContext(), emptyList<GroupedCartFood>().toMutableList(),viewModel,viewLifecycleOwner)
+    }
+
+    private fun onPlaceOrder() {
+        binding.cartTotalPrice.text = "₺0"
+        viewModel.clearCart()
+        binding.cartRecyclerView.adapter = CartAdapter(requireContext(), emptyList<GroupedCartFood>().toMutableList(),viewModel,viewLifecycleOwner)
+        val completeDialog = OrderCompleteDialog()
+        completeDialog.show(parentFragmentManager, "OrderCompleteDialog")
     }
 
     override fun onFoodAdd(price: Double) {
