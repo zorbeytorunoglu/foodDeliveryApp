@@ -71,22 +71,6 @@ class MainFragment : Fragment() {
             }
         }
 
-//        lifecycleScope.launch {
-//            viewModel.removeFoodFromCartState.collectLatest {
-//                if (it.error.isNotBlank()) {
-//                    //showSnackbar(it.error)
-//                }
-//            }
-//        }
-
-//        lifecycleScope.launch {
-//            viewModel.getFoodsInCartState.collectLatest {
-//                if (it.error.isNotBlank()) {
-//                    showSnackbar(it.error)
-//                }
-//            }
-//        }
-
         lifecycleScope.launch {
             viewModel.cartLiveData.observe(viewLifecycleOwner) { foodInCartList ->
 
