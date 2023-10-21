@@ -35,6 +35,8 @@ class FoodDetailFragment : Fragment() {
             .load("${Constants.FULL_IMAGE_LOAD_URL}${food.imageName}")
             .into(binding.foodDetailImageImageView)
 
+        binding.foodDetailFoodNameTextView.text = food.name
+
         binding.foodDetailAddCardView.setOnClickListener {
             viewModel.addFoodToCart(food)
         }
